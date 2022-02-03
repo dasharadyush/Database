@@ -1,70 +1,69 @@
-/*1.Cуммарное колво пассажиров и колво выживших, доля выживших*/
+/*1.CСѓРјРјР°СЂРЅРѕРµ РєРѕР»РІРѕ РїР°СЃСЃР°Р¶РёСЂРѕРІ Рё РєРѕР»РІРѕ РІС‹Р¶РёРІС€РёС…, РґРѕР»СЏ РІС‹Р¶РёРІС€РёС…*/
 SELECT SUM(Survived), COUNT(PassengerId) as Passengers, 
 ROUND(CAST(SUM(Survived) as float)/CAST(COUNT(PassengerId) as float), 2) as 'Proportion of survivors'
 FROM Titanic
 
-/*2.По каждому классу билета суммарное колво пассажиров и колво выживших, доля выживших*/
+/*2.РџРѕ РєР°Р¶РґРѕРјСѓ РєР»Р°СЃСЃСѓ Р±РёР»РµС‚Р° СЃСѓРјРјР°СЂРЅРѕРµ РєРѕР»РІРѕ РїР°СЃСЃР°Р¶РёСЂРѕРІ Рё РєРѕР»РІРѕ РІС‹Р¶РёРІС€РёС…, РґРѕР»СЏ РІС‹Р¶РёРІС€РёС…*/
 SELECT Pclass, SUM(Survived) as Survived, COUNT(PassengerId) as Passengers, 
 ROUND(CAST(SUM(Survived) as float)/CAST(COUNT(PassengerId) as float), 2) as 'Proportion of survivors'
 FROM Titanic 
 GROUP BY Pclass
 ORDER BY Pclass
 
-/*3.По каждому классу билета и полу пассажира суммарное колво пассажиров, колво выживших и долю выживших.*/
+/*3.РџРѕ РєР°Р¶РґРѕРјСѓ РєР»Р°СЃСЃСѓ Р±РёР»РµС‚Р° Рё РїРѕР»Сѓ РїР°СЃСЃР°Р¶РёСЂР° СЃСѓРјРјР°СЂРЅРѕРµ РєРѕР»РІРѕ РїР°СЃСЃР°Р¶РёСЂРѕРІ, РєРѕР»РІРѕ РІС‹Р¶РёРІС€РёС… Рё РґРѕР»СЋ РІС‹Р¶РёРІС€РёС….*/
 SELECT Pclass, Sex, SUM(Survived) as Survived, COUNT(PassengerId) as Passengers, 
 ROUND(CAST(SUM(Survived) as float)/CAST(COUNT(PassengerId) as float), 2) as 'Proportion of survivors'
 FROM Titanic 
 GROUP BY Pclass, Sex
 ORDER BY Pclass
 
-/*4.По каждому порту отправления колво пассажиров, колво выживших и долю выживших*/
+/*4.РџРѕ РєР°Р¶РґРѕРјСѓ РїРѕСЂС‚Сѓ РѕС‚РїСЂР°РІР»РµРЅРёСЏ РєРѕР»РІРѕ РїР°СЃСЃР°Р¶РёСЂРѕРІ, РєРѕР»РІРѕ РІС‹Р¶РёРІС€РёС… Рё РґРѕР»СЋ РІС‹Р¶РёРІС€РёС…*/
 SELECT Embarked, SUM(Survived) as Survived, COUNT(PassengerId) as Passengers, 
 ROUND(CAST(SUM(Survived) as float)/CAST(COUNT(PassengerId) as float), 2) as 'Proportion of survivors'
 FROM Titanic 
 GROUP BY Embarked
 ORDER BY Embarked
 
-/*5.Порт отправления с наибольшим колвом пассажиров*/
+/*5.РџРѕСЂС‚ РѕС‚РїСЂР°РІР»РµРЅРёСЏ СЃ РЅР°РёР±РѕР»СЊС€РёРј РєРѕР»РІРѕРј РїР°СЃСЃР°Р¶РёСЂРѕРІ*/
 SELECT TOP 1 with ties Embarked
 FROM Titanic
 GROUP BY Embarked
 ORDER BY COUNT(PassengerId) desc
 
-/*6.Cредний возраст пассажиров и средний возраст выживших в группировке по классу билета и полу*/
-/*Пустые значения Age проимпортировались как NULL, а значит среднее значение считается верно*/
-/*Я так понимаю, через Left join среднее если никто не выжил не потеряется, как сделать именно этот запрос короче, не придумала*/
-SELECT T1.Pclass, T1.Sex, T2.Средний_выживших, T1.Средний
+/*6.CСЂРµРґРЅРёР№ РІРѕР·СЂР°СЃС‚ РїР°СЃСЃР°Р¶РёСЂРѕРІ Рё СЃСЂРµРґРЅРёР№ РІРѕР·СЂР°СЃС‚ РІС‹Р¶РёРІС€РёС… РІ РіСЂСѓРїРїРёСЂРѕРІРєРµ РїРѕ РєР»Р°СЃСЃСѓ Р±РёР»РµС‚Р° Рё РїРѕР»Сѓ*/
+/*РџСѓСЃС‚С‹Рµ Р·РЅР°С‡РµРЅРёСЏ Age РїСЂРѕРёРјРїРѕСЂС‚РёСЂРѕРІР°Р»РёСЃСЊ РєР°Рє NULL, Р° Р·РЅР°С‡РёС‚ СЃСЂРµРґРЅРµРµ Р·РЅР°С‡РµРЅРёРµ СЃС‡РёС‚Р°РµС‚СЃСЏ РІРµСЂРЅРѕ*/
+/*РЇ С‚Р°Рє РїРѕРЅРёРјР°СЋ, С‡РµСЂРµР· Left join СЃСЂРµРґРЅРµРµ РµСЃР»Рё РЅРёРєС‚Рѕ РЅРµ РІС‹Р¶РёР» РЅРµ РїРѕС‚РµСЂСЏРµС‚СЃСЏ, РєР°Рє СЃРґРµР»Р°С‚СЊ РёРјРµРЅРЅРѕ СЌС‚РѕС‚ Р·Р°РїСЂРѕСЃ РєРѕСЂРѕС‡Рµ, РЅРµ РїСЂРёРґСѓРјР°Р»Р°*/
+SELECT T1.Pclass, T1.Sex, T2.РЎСЂРµРґРЅРёР№_РІС‹Р¶РёРІС€РёС…, T1.РЎСЂРµРґРЅРёР№
 FROM
-(SELECT ROUND(AVG(Age), 2) as Средний, Pclass, Sex
+(SELECT ROUND(AVG(Age), 2) as РЎСЂРµРґРЅРёР№, Pclass, Sex
 FROM Titanic 
 GROUP BY Pclass, Sex) as T1
 LEFT JOIN
-(SELECT ROUND(AVG(Age), 2) as Средний_выживших, Pclass, Sex
+(SELECT ROUND(AVG(Age), 2) as РЎСЂРµРґРЅРёР№_РІС‹Р¶РёРІС€РёС…, Pclass, Sex
 FROM Titanic 
 WHERE Survived = 1
 GROUP BY Pclass, Sex) as T2 ON T1.Pclass = T2.Pclass AND T1.Sex = T2.Sex
 ORDER BY T1.Pclass
 
-/*7.Первые 10 строк по убыванию стоимости билета.*/
-/*Нет, запросом ниже убедилась, что тариф написан за билет, а билет по таблице может быть на несколько человек*/
+/*7.РџРµСЂРІС‹Рµ 10 СЃС‚СЂРѕРє РїРѕ СѓР±С‹РІР°РЅРёСЋ СЃС‚РѕРёРјРѕСЃС‚Рё Р±РёР»РµС‚Р°.*/
 SELECT TOP 10 with ties *
 FROM Titanic
 ORDER BY Fare desc
 
-/*8.Есть ли билеты, для которых цена в разных строках отличается?*/
-/*Да, такие билеты есть, этот запрос выводит билеты, у которых в разных строках различная цена*/
+/*8.Р•СЃС‚СЊ Р»Рё Р±РёР»РµС‚С‹, РґР»СЏ РєРѕС‚РѕСЂС‹С… С†РµРЅР° РІ СЂР°Р·РЅС‹С… СЃС‚СЂРѕРєР°С… РѕС‚Р»РёС‡Р°РµС‚СЃСЏ?*/
+/*Р”Р°, С‚Р°РєРёРµ Р±РёР»РµС‚С‹ РµСЃС‚СЊ, СЌС‚РѕС‚ Р·Р°РїСЂРѕСЃ РІС‹РІРѕРґРёС‚ Р±РёР»РµС‚С‹, Сѓ РєРѕС‚РѕСЂС‹С… РІ СЂР°Р·РЅС‹С… СЃС‚СЂРѕРєР°С… СЂР°Р·Р»РёС‡РЅР°СЏ С†РµРЅР°*/
 SELECT Ticket
 FROM Titanic
 GROUP BY Ticket
 HAVING COUNT(DISTINCT Fare) > 1
-/*Для порта отправления*/
+/*Р”Р»СЏ РїРѕСЂС‚Р° РѕС‚РїСЂР°РІР»РµРЅРёСЏ*/
 SELECT Ticket 
 FROM Titanic
 GROUP BY Ticket
 HAVING COUNT(DISTINCT Embarked) > 1
 
-/*9.Для каждого номера билета, класса, цены и порта отправления колво пассажиров, колво выживших пассажиров.*/
-/*Выводит NULL в случае если нет выживших*/
+/*9.Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РЅРѕРјРµСЂР° Р±РёР»РµС‚Р°, РєР»Р°СЃСЃР°, С†РµРЅС‹ Рё РїРѕСЂС‚Р° РѕС‚РїСЂР°РІР»РµРЅРёСЏ РєРѕР»РІРѕ РїР°СЃСЃР°Р¶РёСЂРѕРІ, РєРѕР»РІРѕ РІС‹Р¶РёРІС€РёС… РїР°СЃСЃР°Р¶РёСЂРѕРІ.*/
+/*Р’С‹РІРѕРґРёС‚ NULL РІ СЃР»СѓС‡Р°Рµ РµСЃР»Рё РЅРµС‚ РІС‹Р¶РёРІС€РёС…*/
 SELECT T1.Ticket, T1.Pclass, T1.Fare, T1.embarked, T1.Passengers, T2.Survived 
 FROM (SELECT COUNT(PassengerId) as Passengers, Ticket, Pclass, Fare, Embarked
 FROM Titanic 
@@ -76,14 +75,14 @@ WHERE Survived = 1
 GROUP BY Ticket, Pclass, Fare, Embarked) as T2 ON T1.Ticket = T2.Ticket AND 
 T1.Pclass = T2.Pclass AND T1.Fare = T2.Fare AND T1.Embarked = T2.Embarked
 
-/*10.Билеты, для которых колво пассажиров более 1 и все пассажиры выжили*/
+/*10.Р‘РёР»РµС‚С‹, РґР»СЏ РєРѕС‚РѕСЂС‹С… РєРѕР»РІРѕ РїР°СЃСЃР°Р¶РёСЂРѕРІ Р±РѕР»РµРµ 1 Рё РІСЃРµ РїР°СЃСЃР°Р¶РёСЂС‹ РІС‹Р¶РёР»Рё*/
 SELECT Ticket
 FROM Titanic
 GROUP BY Ticket
 HAVING COUNT(PassengerId) > 1 AND COUNT(PassengerId) = SUM(Survived)
 
-/*11.Запрос, который посчитает вероятность выжить, если Вас зовут Elizabeth, 
-если Вас зовут Mary (достаточно посчитать, что такая подстрока должна входить в имя пассажира)*/
+/*11.Р—Р°РїСЂРѕСЃ, РєРѕС‚РѕСЂС‹Р№ РїРѕСЃС‡РёС‚Р°РµС‚ РІРµСЂРѕСЏС‚РЅРѕСЃС‚СЊ РІС‹Р¶РёС‚СЊ, РµСЃР»Рё Р’Р°СЃ Р·РѕРІСѓС‚ Elizabeth, 
+РµСЃР»Рё Р’Р°СЃ Р·РѕРІСѓС‚ Mary (РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РїРѕСЃС‡РёС‚Р°С‚СЊ, С‡С‚Рѕ С‚Р°РєР°СЏ РїРѕРґСЃС‚СЂРѕРєР° РґРѕР»Р¶РЅР° РІС…РѕРґРёС‚СЊ РІ РёРјСЏ РїР°СЃСЃР°Р¶РёСЂР°)*/
 DECLARE @c float, @b float, @m float, @p float
 SET @c = (SELECT COUNT(PassengerId) FROM Titanic WHERE Name like '%Mary%')
 SET @b = (SELECT SUM(Survived) FROM Titanic WHERE Name like '%Mary%')
@@ -91,7 +90,7 @@ SET @p = (SELECT COUNT(PassengerId) FROM Titanic WHERE Name like '%Elizabeth%')
 SET @m = (SELECT SUM(Survived) FROM Titanic WHERE Name like '%Elizabeth%')
 
 
-SELECT ROUND( @b/@c, 2) as Вероятность, 'Mary' as Name
+SELECT ROUND( @b/@c, 2) as Р’РµСЂРѕСЏС‚РЅРѕСЃС‚СЊ, 'Mary' as Name
 UNION
-SELECT ROUND( @m/@p, 2) as Вероятность, 'Elizabeth' as Name
+SELECT ROUND( @m/@p, 2) as Р’РµСЂРѕСЏС‚РЅРѕСЃС‚СЊ, 'Elizabeth' as Name
 
